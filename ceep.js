@@ -1,5 +1,5 @@
 /**
- *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
+ *  	Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
  *	Version	:	1.0.0.0
  *	Date	:	21.03.2013
@@ -13,32 +13,32 @@
 	
 	if (!window.Element)
 	{
-		var Element						= 	{
-												prototype : {},
-												prototypeKeys : [],
-												register : function(){
-													var a = this.prototypeKeys = [];
+		var Element				= 	{
+									prototype : {},
+									prototypeKeys : [],
+									register : function(){
+										var a = this.prototypeKeys = [];
+									
+										for (var proto in this.prototype)
+											a.push(proto);
 												
-													for (var proto in this.prototype)
-														a.push(proto);
-															
-													return a;
-												},
-												extend : function(a){
-													if (this.prototypeKeys.length == 0) this.register();
-													
-													for (var b = this.prototypeKeys, index = b.length, match; match = b[--index]; a[match] = this.prototype[match]);
-													
-													return a;
-												}
-											},
-			doc							= 	document,
-			multi						= 	function(a){if (a) for (var index = a.length; index--; Element.extend(a[index])); return a;},
+										return a;
+									},
+									extend : function(a){
+										if (this.prototypeKeys.length == 0) this.register();
+										
+										for (var b = this.prototypeKeys, index = b.length, match; match = b[--index]; a[match] = this.prototype[match]);
+										
+										return a;
+									}
+								},
+			doc				= 	document,
+			multi				= 	function(a){if (a) for (var index = a.length; index--; Element.extend(a[index])); return a;},
 			nativeCreateElement 		= 	doc.createElement,
 			nativeGetElementById 		= 	doc.getElementById,
 			nativeGetElementsByName 	= 	doc.getElementsByName,
 			nativeGetElementsByTagName 	= 	doc.getElementsByTagName,
-			nativeGetElementsByClassName= 	doc.getElementsByClassName;
+			nativeGetElementsByClassName	= 	doc.getElementsByClassName;
 		
 		doc.createElement = function(tagName){
 			return Element.extend(nativeCreateElement(tagName));
