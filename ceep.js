@@ -1,7 +1,7 @@
 /**
  *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
- *	Version	:	1.0.1.1
+ *	Version	:	1.0.2.0
  *	Date	:	21.03.2013
  *
  *	Description:	
@@ -15,21 +15,34 @@
 	{
 		var obj				= 	{prototype : {}},
 			doc				= 	document,
-			prototypeVer	=	0,
+			prototypeRegs	=	[],
 			prototypeLabel	=	'data-hasExtendedPrototype',
 			prototypeKeys	=	[],
 			register		=	function(){
-									var a = prototypeKeys = [], protos = obj.prototype; obj.syncVersion=++prototypeVer;
+									var oldKeys = prototypeKeys, a = prototypeKeys = [], protos = obj.prototype,match;
 								
+									for (var before = {}, index = oldKeys.length; index--; before[oldKeys[index]]=true);
 									for (var proto in protos)
+									{
+										if (!before[proto])
+											for (var index = prototypeRegs.length; index--; (match = prototypeRegs[index]) ? match[proto]=protos[proto] : prototypeRegs.splice(index,1));
+										
 										a.push(proto);
+									}
 											
 									return a;
 								},
 			extend			=	function(a){
-									if (a[prototypeLabel]==prototypeVer) return a; else var index;
-									if ((index = prototypeKeys.length) ? index : (index = register().length)) a[prototypeLabel]=prototypeVer; else return a;
-									for (var match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
+									if (a[prototypeLabel]) return a; 
+									
+									var index = prototypeKeys.length;
+									
+									if (index || (index = register().length))
+									{
+										a[prototypeLabel]=1;
+										prototypeRegs.push(a);
+										for (var match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
+									}
 									
 									return a;
 								},
@@ -40,7 +53,6 @@
 		add(['createElement','getElementById'],extend);
 		add(['getElementsByName','getElementsByTagName'],multi);
 		
-		obj.syncVersion		=	prototypeVer;
 		obj.syncPrototypes	= 	register;
 		window.Element 		= 	obj;
 	}
