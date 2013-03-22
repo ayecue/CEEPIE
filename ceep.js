@@ -1,7 +1,7 @@
 /**
  *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
- *	Version	:	1.0.0.2
+ *	Version	:	1.0.0.3
  *	Date	:	21.03.2013
  *
  *	Description:	
@@ -36,7 +36,7 @@
 								},
 			multi			= 	function(a){if (a) for (var index = a.length; index--; extend(a[index])); return a;},
 			replace			= 	function(a,b){var c=doc[a]; doc[a]=function(d){return b(c(d));};},
-			add				=	function(a,b){for (var index = a.length; index--; sync(a[index],b));};
+			add				=	function(a,b){for (var index = a.length; index--; replace(a[index],b));};
 		
 		add(['createElement','getElementById'],extend);
 		add(['getElementsByName','getElementsByTagName'],multi);
