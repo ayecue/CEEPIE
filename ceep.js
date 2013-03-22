@@ -1,8 +1,8 @@
 /**
- *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
+ *	Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
- *	Version	:	1.0.0.3
- *	Date	:	21.03.2013
+ *	Version	:	1.0.1.0
+ *	Date	:	22.03.2013
  *
  *	Description:	
  *
@@ -17,20 +17,19 @@
 			doc				= 	document,
 			prototypeCache	=	true,
 			prototypeLabel	=	'data-hasExtendedPrototype',
-			prototypeKeys	=	null,
+			prototypeKeys	=	[],
 			register		=	function(){
 									var a = prototypeKeys = [], protos = obj.prototype;
 								
 									for (var proto in protos)
 										a.push(proto);
 											
-									return (a.length > 0) ? a : (a = prototypeKeys = null);
+									return a;
 								},
 			extend			=	function(a){
-									if (a[prototypeLabel]) return a; else a[prototypeLabel]=prototypeCache;
-									if (prototypeKeys) register();
-									
-									for (var index = prototypeKeys.length, match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
+									if (a[prototypeLabel]) return a; else var index;
+									if ((index = prototypeKeys.length) ? index : (index = register().length)) a[prototypeLabel]=prototypeCache; else return a;
+									for (var match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
 									
 									return a;
 								},
