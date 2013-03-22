@@ -36,9 +36,4 @@ Enable you to work with Element prototypes in the IE. Emulates a normal Element 
     Element.prototype.Cool = function(){console.log('bar');};
     Element.syncPrototypes();
     
-    test.Cool(); /* Wont work */
-    
-    /* Your have to get your object again */
-    var test = $('form')[0];
-    
-    test.Cool(); /* This will work */
+    test.Cool();
