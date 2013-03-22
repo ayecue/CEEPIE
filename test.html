@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="http://www.datainjector.de/cssReader/ceep.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				Element.prototype.Testing = function(){console.log('test');};
+				Element.prototype.Hey = function(){console.log('see');};
+				Element.prototype.Woot = function(){console.log('haha');};
+				
+				var test = $('form')[0];
+				
+				test.Testing();
+				test.Hey();
+				test.Woot();
+				
+				Element.prototype.Bar = function(){console.log('seeyou');};
+				Element.syncPrototypes();
+				
+				test.Bar();
+				
+				var testing = test.cloneNode();
+				
+				Element.prototype.Foo = function(){console.log('cool');};
+				Element.syncPrototypes();
+				
+				testing.Foo();
+			});
+		</script>
+	</head>
+	<body>
+		<form action="?test=1&foo=2" method="get">
+			<input type="submit" value="test me" />
+		</form>
+	</body>
+</html>
