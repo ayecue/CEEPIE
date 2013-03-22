@@ -1,7 +1,7 @@
 /**
- *  	Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
+ *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
- *	Version	:	1.0.0.0
+ *	Version	:	1.0.0.2
  *	Date	:	21.03.2013
  *
  *	Description:	
@@ -13,54 +13,35 @@
 	
 	if (!window.Element)
 	{
-		var Element				= 	{
-									prototype : {},
-									prototypeKeys : [],
-									register : function(){
-										var a = this.prototypeKeys = [];
-									
-										for (var proto in this.prototype)
-											a.push(proto);
-												
-										return a;
-									},
-									extend : function(a){
-										if (this.prototypeKeys.length == 0) this.register();
-										
-										for (var b = this.prototypeKeys, index = b.length, match; match = b[--index]; a[match] = this.prototype[match]);
-										
-										return a;
-									}
-								},
+		var obj				= 	{prototype : {}},
 			doc				= 	document,
-			multi				= 	function(a){if (a) for (var index = a.length; index--; Element.extend(a[index])); return a;},
-			nativeCreateElement 		= 	doc.createElement,
-			nativeGetElementById 		= 	doc.getElementById,
-			nativeGetElementsByName 	= 	doc.getElementsByName,
-			nativeGetElementsByTagName 	= 	doc.getElementsByTagName,
-			nativeGetElementsByClassName	= 	doc.getElementsByClassName;
+			prototypeCache	=	true,
+			prototypeLabel	=	'data-hasExtendedPrototype',
+			prototypeKeys	=	null,
+			register		=	function(){
+									var a = prototypeKeys = [], protos = obj.prototype;
+								
+									for (var proto in protos)
+										a.push(proto);
+											
+									return (a.length > 0) ? a : (a = prototypeKeys = null);
+								},
+			extend			=	function(a){
+									if (a[prototypeLabel]) return a; else a[prototypeLabel]=prototypeCache;
+									if (prototypeKeys) register();
+									
+									for (var index = prototypeKeys.length, match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
+									
+									return a;
+								},
+			multi			= 	function(a){if (a) for (var index = a.length; index--; extend(a[index])); return a;},
+			replace			= 	function(a,b){var c=doc[a]; doc[a]=function(d){return b(c(d));};},
+			add				=	function(a,b){for (var index = a.length; index--; sync(a[index],b));};
 		
-		doc.createElement = function(tagName){
-			return Element.extend(nativeCreateElement(tagName));
-		};
-		
-		doc.getElementById = function(id){
-			return Element.extend(nativeGetElementById(id));
-		};
-		
-		doc.getElementsByName = function(name){					
-			return multi(nativeGetElementsByName(name));
-		};
-		
-		doc.getElementsByTagName = function(tagName){							
-			return multi(nativeGetElementsByTagName(tagName));
-		};
-		
-		if (nativeGetElementsByClassName)
-			doc.getElementsByClassName = function(className){								
-				return multi(nativeGetElementsByClassName(className));
-			};
+		add(['createElement','getElementById'],extend);
+		add(['getElementsByName','getElementsByTagName'],multi);
 			
-		window.Element = Element;
+		obj.syncPrototypes	= 	register;
+		window.Element 		= 	obj;
 	}
 }).call(this);
