@@ -16,14 +16,12 @@
 				test.Woot();
 				
 				Element.prototype.Bar = function(){console.log('seeyou');};
-				test.sync();
 				
 				test.Bar();
 				
 				var testing = test.cloneNode();
 				
-				Element.prototype.Foo = function(){console.log('cool');};
-				Element.sync();
+				Element.prototype.Foo = function(){console.log(this.tagName);};
 				
 				testing.Foo();
 			});
