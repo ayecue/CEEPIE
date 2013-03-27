@@ -1,8 +1,8 @@
 /**
  *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
- *	Version	:	1.0.2.5
- *	Date	:	21.03.2013
+ *	Version	:	1.0.3.0
+ *	Date	:	26.03.2013
  *
  *	Description:	
  *
@@ -11,15 +11,16 @@
 (function() {
 	"use strict";
 	
-	if (!window.Element)
+	var keyword = 'Element', n = window[keyword];
+	
+	if (!n)
 	{
-		var obj				= 	{prototype : {}},
-			doc				= 	document,
+		var doc				= 	document,
 			prototypeRegs	=	[],
 			prototypeLabel	=	'data-hasExtendedPrototype',
 			prototypeKeys	=	[],
 			register		=	function(){
-									var oldKeys = prototypeKeys, a = prototypeKeys = [], protos = obj.prototype,match;
+									var oldKeys = prototypeKeys, a = prototypeKeys = [], protos = Element.prototype,match;
 								
 									for (var before = {}, index = oldKeys.length; index--; before[oldKeys[index]]=true);
 									for (var proto in protos)
@@ -41,8 +42,10 @@
 									{
 										for (var match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
 										add(['cloneNode'],extend,a);
-										a[prototypeLabel]=1;
+										a.sync=register;
+						
 										prototypeRegs.push(a);
+										a[prototypeLabel]=true;
 									}
 									
 									return a;
@@ -54,7 +57,8 @@
 		add(['createElement','getElementById'],extend,doc);
 		add(['getElementsByName','getElementsByTagName'],multi,doc);
 		
-		obj.syncPrototypes	= 	register;
-		window.Element 		= 	obj;
+		window[keyword] = {prototype : {},sync:register};
 	}
+	else if (!n.prototype.sync && !n.sync)
+		n.prototype.sync = n.sync = function(){return false};
 }).call(this);
