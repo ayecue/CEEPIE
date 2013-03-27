@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script type="text/javascript" src="http://www.datainjector.de/cssReader/ceep.min.js"></script>
+		<script type="text/javascript" src="ceep.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -16,14 +16,14 @@
 				test.Woot();
 				
 				Element.prototype.Bar = function(){console.log('seeyou');};
-				Element.syncPrototypes();
+				test.sync();
 				
 				test.Bar();
 				
 				var testing = test.cloneNode();
 				
 				Element.prototype.Foo = function(){console.log('cool');};
-				Element.syncPrototypes();
+				Element.sync();
 				
 				testing.Foo();
 			});
