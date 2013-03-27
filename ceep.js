@@ -1,7 +1,7 @@
 /**
  *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
- *	Version	:	1.0.3.0
+ *	Version	:	1.0.4.0
  *	Date	:	26.03.2013
  *
  *	Description:	
@@ -11,54 +11,57 @@
 (function() {
 	"use strict";
 	
-	var keyword = 'Element', n = window[keyword];
-	
-	if (!n)
+	var MAIN = window,
+		KEYWORD = 'Element',
+		OBJECT = MAIN[KEYWORD],
+		DOC = document;
+		
+	if (!OBJECT)
 	{
-		var doc				= 	document,
-			prototypeRegs	=	[],
-			prototypeLabel	=	'data-hasExtendedPrototype',
-			prototypeKeys	=	[],
-			register		=	function(){
-									var oldKeys = prototypeKeys, a = prototypeKeys = [], protos = Element.prototype,match;
-								
-									for (var before = {}, index = oldKeys.length; index--; before[oldKeys[index]]=true);
-									for (var proto in protos)
-									{
-										if (!before[proto])
-											for (var index = prototypeRegs.length; index--; (match = prototypeRegs[index]) ? match[proto]=protos[proto] : prototypeRegs.splice(index,1));
-										
-										a.push(proto);
-									}
-											
-									return a;
-								},
-			extend			=	function(a,r){
-									if (a[prototypeLabel] && r==doc) return a; 
-									
-									var index = prototypeKeys.length;
-									
-									if (index || (index = register().length))
-									{
-										for (var match; match = prototypeKeys[--index]; a[match] = Element.prototype[match]);
-										add(['cloneNode'],extend,a);
-										a.sync=register;
-						
-										prototypeRegs.push(a);
-										a[prototypeLabel]=true;
-									}
-									
-									return a;
-								},
-			multi			= 	function(a,r){if (a) for (var index = a.length; index--; extend(a[index],r)); return a;},
-			replace			= 	function(a,b,r){var c=r[a]; r[a]=function(){return b(c.apply(r,arguments),r);};},
-			add				=	function(a,b,r){for (var index = a.length; index--; replace(a[index],b,r));};
+		var CORELABEL = 'prototype',
+			DUMMYEVENT = 'onpropertychange',
+			PROTOLABEL = 'data-hasExtendedPrototype';
 		
-		add(['createElement','getElementById'],extend,doc);
-		add(['getElementsByName','getElementsByTagName'],multi,doc);
+		DOC.write('<'+CORELABEL+'>');
 		
-		window[keyword] = {prototype : {},sync:register};
+		var protoHas = {},
+			protoRegs = [],
+			protoKeys = [],
+			proto = {},
+			update = function(p){
+				var p = event.propertyName;
+			
+				if (!protoHas[p])
+					protoKeys.push(p);
+				
+				protoHas[p]=proto[CORELABEL][p];
+				for (var index = protoRegs.length; index--; protoRegs[index][p]=protoHas[p]);
+			},
+			extend = function(a,r){
+				if (a[PROTOLABEL] && DOC == r) return a;
+				
+				var index = protoKeys.length;
+				
+				if (index)
+				{
+					for (var match; match = protoKeys[--index]; a[match] = protoHas[match]);
+				
+					add(['cloneNode'],extend,a);
+					protoRegs.push(a);
+					a[PROTOLABEL]=true;
+				}
+			
+				return a;
+			},
+			multi = function(a,r){if (a) for (var index = a.length; index--; extend(a[index],r)); return a;},
+			replace	= function(a,b,r){var c=r[a]; r[a]=function(){return b(c.apply(r,arguments),r);};},
+			add	= function(a,b,r){for (var index = a.length; index--; replace(a[index],b,r));};
+			
+		proto[CORELABEL]=DOC.getElementsByTagName(CORELABEL)[0];
+		proto[CORELABEL].attachEvent(DUMMYEVENT,update);
+		add(['createElement','getElementById'],extend,DOC);
+		add(['getElementsByName','getElementsByTagName'],multi,DOC);
+		
+		MAIN[KEYWORD] = proto;
 	}
-	else if (!n.prototype.sync && !n.sync)
-		n.prototype.sync = n.sync = function(){return false};
 }).call(this);
