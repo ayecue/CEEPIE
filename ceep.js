@@ -28,7 +28,7 @@
 			protoRegs = [],
 			protoKeys = [],
 			proto = {},
-			update = function(p){
+			update = function(){
 				var p = event.propertyName;
 			
 				if (!protoHas[p])
