@@ -1,5 +1,5 @@
 /**
- *  Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
+ *	Name	:	CEEP IE7 - Complete Emulated Element Prototype IE
  *	Author	:	ayecue
  *	Version	:	1.0.4.0
  *	Date	:	27.03.2013
@@ -11,26 +11,26 @@
 (function() {
 	"use strict";
 	
-	var MAIN = window,
+	var 	MAIN = window,
 		KEYWORD = 'Element',
 		OBJECT = MAIN[KEYWORD],
 		DOC = document;
 		
 	if (!OBJECT)
 	{
-		var CORELABEL = 'prototype',
+		var 	CORELABEL = 'prototype',
 			DUMMYEVENT = 'onpropertychange',
 			PROTOLABEL = 'data-hasExtendedPrototype';
 		
 		DOC.write('<'+CORELABEL+'>');
 		
-		var protoHas = {},
+		var 	protoHas = {},
 			protoRegs = [],
 			protoKeys = [],
 			proto = {},
 			update = function(){
 				var p = event.propertyName;
-			
+
 				if (!protoHas[p])
 					protoKeys.push(p);
 				
@@ -50,7 +50,7 @@
 					protoRegs.push(a);
 					a[PROTOLABEL]=true;
 				}
-			
+
 				return a;
 			},
 			multi = function(a,r){if (a) for (var index = a.length; index--; extend(a[index],r)); return a;},
