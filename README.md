@@ -24,25 +24,3 @@ Enable you to work with Element prototypes in the IE. Emulates a normal Element 
         /* Execute the added "Hey" prototype function */
         testClone.Hey();
     });
-    
-### Additional:
-    /* After the first call of the syncPrototype function you have to sync your Prototypes manually */
-    Element.prototype.Testing = function(){console.log('test');};
-    Element.prototype.Hey = function(){console.log('see');};
-    
-    var test = $('form')[0];
-    
-    test.Testing();
-    test.Hey();
-    
-    Element.prototype.Cool = function(){console.log('bar');};
-    test.sync(); //Sync the new prototype
-    
-    /* Now the cool prototype is working */
-    test.Cool();
-    
-    Element.prototype.Woot = function(){console.log('haha');};
-    Element.sync(); //Sync the new prototype
-    
-    /* Now the woot prototype is working */
-    test.Woot();
